@@ -1,5 +1,6 @@
 package com.wanted.cqrs.core;
 
+import com.wanted.cqrs.core.response.ErrorResponse;
 import com.wanted.cqrs.exception.AlertException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,13 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AlertException.class)
     public ResponseEntity<ErrorResponse> handleException(AlertException ex) {
         log.info("AlertException: {}", ex.getErrorType().getHttpStatus());
-        ErrorResponse response = new ErrorResponse(Error.builder()
-                .code(ex.getErrorType().toString())
-                .message(ex.getMessage())
-                .details(ex.getDetails())
-                .build());
+        ErrorResponse response = ErrorResponse.builder()
+                .error(Error.builder()
+                        .code(ex.getErrorType().toString())
+                        .message(ex.getMessage())
+                        .details(ex.getDetails())
+                        .build())
+                .build();
 
         return ResponseEntity
                 .status(ex.getErrorType().getHttpStatus())

@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class ProductSrchRequest {
+    //TODO: page 관련 필드는 공통으로 쓸듯?
     private int page = 1;
     private int perPage = 10;
     //TODO: 다중 정렬 요청 처리 로직 필요함
