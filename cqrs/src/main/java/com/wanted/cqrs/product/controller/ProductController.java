@@ -1,6 +1,7 @@
 package com.wanted.cqrs.product.controller;
 
 import com.wanted.cqrs.core.ErrorType;
+import com.wanted.cqrs.core.PageData;
 import com.wanted.cqrs.core.response.BaseResponse;
 import com.wanted.cqrs.core.response.SuccessResponse;
 import com.wanted.cqrs.exception.AlertException;
@@ -12,7 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,7 +25,7 @@ public class ProductController {
     public ResponseEntity<SuccessResponse<String>> createProduct(HttpServletRequest request) {
         try {
             SuccessResponse<String> response = SuccessResponse.<String>builder()
-                    .message("상품 목록을 성공적으로 조회했습니다.")
+                    .message("상품이 성공적으로 등록되었습니다.")
                     .data("A")
                     .build();
 
@@ -38,11 +41,23 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<SuccessResponse<String>> getProducts(@ParameterObject @Valid ProductSrchRequest request) {
+    public ResponseEntity<SuccessResponse<PageData<String>>> getProducts(@ParameterObject @Valid ProductSrchRequest request) {
         try {
-            SuccessResponse<String> response = SuccessResponse.<String>builder()
+            List<String> items = Collections.singletonList("A");
+
+            PageData<String> pageData = PageData.<String>builder()
+                    .items(items)
+                    .pagination(PageData.Pagination.builder()
+                            .total_items(100)
+                            .total_pages(100)
+                            .current_page(1)
+                            .per_page(10)
+                            .build())
+                    .build();
+
+            SuccessResponse<PageData<String>> response = SuccessResponse.<PageData<String>>builder()
                     .message("상품 목록을 성공적으로 조회했습니다.")
-                    .data("sample")
+                    .data(pageData)
                     .build();
 
             return ResponseEntity.ok()
