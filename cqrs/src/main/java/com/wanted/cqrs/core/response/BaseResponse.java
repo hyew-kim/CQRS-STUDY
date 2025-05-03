@@ -6,7 +6,7 @@ import lombok.Getter;
 public class BaseResponse {
     private final boolean success;
 
-    public BaseResponse(boolean success) {
+    protected BaseResponse(boolean success) {
         this.success = success;
     }
 }

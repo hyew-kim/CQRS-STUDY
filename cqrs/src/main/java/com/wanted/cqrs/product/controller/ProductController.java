@@ -1,6 +1,7 @@
 package com.wanted.cqrs.product.controller;
 
 import com.wanted.cqrs.core.ErrorType;
+import com.wanted.cqrs.core.response.BaseResponse;
 import com.wanted.cqrs.core.response.SuccessResponse;
 import com.wanted.cqrs.exception.AlertException;
 import com.wanted.cqrs.product.domain.ProductSrchRequest;
