@@ -1,0 +1,36 @@
+package com.wanted.cqrs.product.domain.entity;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "brands")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Brands {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(nullable = false, length = 100, unique = true)
+    private String slug;
+
+    @Column(columnDefinition = "text")
+    private String description;
+
+    @Column(name = "logo_url")
+    private String logoUrl;
+
+    private String website;
+}

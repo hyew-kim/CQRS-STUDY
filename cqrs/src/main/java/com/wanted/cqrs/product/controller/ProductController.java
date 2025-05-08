@@ -2,12 +2,14 @@ package com.wanted.cqrs.product.controller;
 
 import com.wanted.cqrs.core.ErrorType;
 import com.wanted.cqrs.core.PageData;
-import com.wanted.cqrs.core.response.BaseResponse;
 import com.wanted.cqrs.core.response.SuccessResponse;
 import com.wanted.cqrs.exception.AlertException;
-import com.wanted.cqrs.product.domain.ProductSrchRequest;
+import com.wanted.cqrs.product.domain.dto.request.ProductListSrchRequestDto;
+import com.wanted.cqrs.product.domain.dto.response.ProductDetailSrchResponseDto;
+import com.wanted.cqrs.product.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
+@RequiredArgsConstructor
 public class ProductController {
+    private final ProductService productService;
+
     @PostMapping("/")
     public ResponseEntity<SuccessResponse<String>> createProduct(HttpServletRequest request) {
         try {
@@ -41,7 +46,7 @@ public class ProductController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<SuccessResponse<PageData<String>>> getProducts(@ParameterObject @Valid ProductSrchRequest request) {
+    public ResponseEntity<SuccessResponse<PageData<String>>> getProducts(@ParameterObject @Valid ProductListSrchRequestDto request) {
         try {
             List<String> items = Collections.singletonList("A");
 
@@ -68,11 +73,15 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SuccessResponse<String>> getProducts(@PathVariable String id) {
+    public ResponseEntity<SuccessResponse<ProductDetailSrchResponseDto>> getProducts(@PathVariable String id) {
         try {
-            SuccessResponse<String> response = SuccessResponse.<String>builder()
+            ProductDetailSrchResponseDto data = productService.getProduct(Long.valueOf(id));
+            if (data == null) {
+                throw new RuntimeException();
+            }
+            SuccessResponse<ProductDetailSrchResponseDto> response = SuccessResponse.<ProductDetailSrchResponseDto>builder()
                     .message("상품 상세 정보를 성공적으로 조회했습니다.")
-                    .data(id)
+                    .data(data)
                     .build();
 
             return ResponseEntity.ok()
