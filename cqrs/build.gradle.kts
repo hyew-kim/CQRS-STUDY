@@ -6,6 +6,7 @@ plugins {
 
 group = "com.wanted"
 version = "0.0.1-SNAPSHOT"
+val querydslVersion = "5.0.0" // 최상단에 버전 정의
 
 java {
 	toolchain {
@@ -33,8 +34,18 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
+
+	//Querydsl 추가
+	implementation("com.querydsl:querydsl-jpa:$querydslVersion:jakarta")
+	annotationProcessor("com.querydsl:querydsl-apt:$querydslVersion:jakarta")
+	annotationProcessor("jakarta.annotation:jakarta.annotation-api")
+	annotationProcessor("jakarta.persistence:jakarta.persistence-api")
 }
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.clean {
+	delete(file("src/main/generated"))
 }
